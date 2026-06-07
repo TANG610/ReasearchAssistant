@@ -1,6 +1,9 @@
 FROM node:22-alpine AS build
 
+ARG NPM_CONFIG_REGISTRY=https://mirrors.cloud.tencent.com/npm/
+
 WORKDIR /app
+ENV NPM_CONFIG_REGISTRY=${NPM_CONFIG_REGISTRY}
 COPY package.json package-lock.json* ./
 RUN npm install
 COPY . .
