@@ -1,0 +1,235 @@
+{
+  "main": {
+    "id": "3b205a9777f01b3c",
+    "type": "split",
+    "children": [
+      {
+        "id": "5a4ac5a617c93f14",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c14ac8cff9f3aa3e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Papers/2026-robust-prior-guided-segmentation-for-editable-3d-gaussian-splatting.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-robust-prior-guided-segmentation-for-editable-3d-gaussian-splatting"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "700248bc93b79a6a",
+    "type": "split",
+    "children": [
+      {
+        "id": "c3dbc5620e142546",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "edfa6a1014190483",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "ba7ed3f5c43c78a5",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "e3ddf426c79f1134",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 544.5
+  },
+  "right": {
+    "id": "bf701af74e349364",
+    "type": "split",
+    "children": [
+      {
+        "id": "a697e37473a86daa",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "05001adb7df8cb02",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "6cb11599e859a945",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "f23bf4b91672e9e0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "9a86add4a94508fb",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "4f2bd30b29a3d25f",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "realclaudian:Open Claudian": false
+    }
+  },
+  "active": "edfa6a1014190483",
+  "lastOpenFiles": [
+    "backend/research_workspace.db-journal",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/f3df37785606651d0040138d4c27c0874a70a557d239437359fc4d887a2b93c3.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/f1a66ce77efaff617f95b43979f47b2846a24c1d9dd490b638865b88f6481be1.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/ec1f6563efd16d8ec4c1d3e8c391197dc2ff0e5afb682266c3bee7529b2eaf44.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/dda17416b707aa760119f677d8be858e252e9d102bba35fb21cf444049f60194.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/d305bf7371a50e98aff6632a6219e186b114045b2c2d5f0ea75296b16a8ce85d.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/c35493dbca8ef6e745d92c34571659cdccd3bc5ab0332492d5fe9dcb5839fba3.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/ad41eb190c51f2ee030cb74caf4a60de7a0846e766b9b85c02aa95b5afd88325.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/9d7755f4458ab4d8c13a67b5d49aa75e736100d9cd77d87f5257ff907c3682ab.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/91f28b7e866eca805abe84b21bb4c461e2120e5a38aa1556738ec0505ae5a135.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images/7af808b7e36031182fd9744b83a1f13edd53282432b6b4eef44719a501a55b64.jpg",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/images",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/077c97c2-6b23-42c9-a517-b3cd84b3d4d7_origin.pdf",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/077c97c2-6b23-42c9-a517-b3cd84b3d4d7_content_list_v2.json",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/layout.json",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/full.md",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/077c97c2-6b23-42c9-a517-b3cd84b3d4d7_model.json",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models/077c97c2-6b23-42c9-a517-b3cd84b3d4d7_content_list.json",
+    "knowledge_base/cache/mineru/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models",
+    "knowledge_base/cache/mineru",
+    "knowledge_base/cache",
+    "knowledge_base/papers/pdf/arxiv-2603.28152v1-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models.pdf",
+    "Papers/2026-op2gs-object-aware-3d-gaussian-splatting-with-dual-opacity-primitives.md",
+    "Papers/2026-guardmarkgs-unified-ownership-tracing-and-edit-deterrence-for-3d-gaussian-splatt.md",
+    "Papers/2025-a3gs-arbitrary-artistic-style-into-arbitrary-3d-gaussian-splatting.md",
+    "Papers/2024-gaussianeditor-swift-and-controllable-3d-editing-with-gaussian-splatting.md",
+    "Papers/2025-adlift-lifting-adversarial-perturbations-to-safeguard-3d-gaussian-splatting-asse.md",
+    "Indexes/3DGS-comparison.md",
+    "Indexes/3DGS.md",
+    "data/mineru_cache/arxiv-2512.07247v1-adlift-lifting-adversarial-perturbations-to-safeguard-3d-gaussia/full.md",
+    "data/mineru_cache/title-e2ccde2089b0-gaussianeditor-swift-and-controllable-3d-editing-with-gaussian-s/full.md",
+    "未命名 1.canvas",
+    "2026-06-02.md",
+    "未命名.canvas",
+    "Papers/2025-camera-aware-cross-view-alignment-for-referring-3d-gaussian-splatting-segmentati.md",
+    "欢迎.md",
+    "Reports/2026-06-02-3DGS-organization-report.md",
+    "Reports/2026-06-01-3DGS-reading-report.md",
+    "Papers/2026-transsplat-unbalanced-semantic-transport-for-language-driven-3dgs-editing.md",
+    "Papers/2026-trace-high-fidelity-3d-scene-editing-via-tangible-reconstruction-and-geometry-al.md",
+    "Papers/2026-robust-prior-guided-segmentation-for-editable-3d-gaussian-splatting.md",
+    "Papers/2026-realm-an-mllm-agent-framework-for-open-world-3d-reasoning-segmentation-and-editi.md",
+    "Papers/2026-objectmorpher-3d-aware-image-editing-via-deformable-3dgs-models.md",
+    "Papers/2026-ng-gs-nerf-guided-3d-gaussian-splatting-segmentation.md",
+    "Papers/2026-langref3dgs-natural-language-guided-3d-referential-segmentation-from-partial-obs.md",
+    "Papers/2026-informative-object-centric-next-best-view-for-object-aware-3d-gaussian-splatting.md",
+    "Papers/2026-benchmarking-single-step-inpainting-methods-for-multi-object-3d-gaussian-splatti.md",
+    "Papers/2025-tune-your-style-intensity-tunable-3d-style-transfer-with-gaussian-splatting.md"
+  ]
+}

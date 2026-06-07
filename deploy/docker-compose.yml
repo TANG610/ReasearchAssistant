@@ -1,0 +1,78 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-research}
+      POSTGRES_USER: ${POSTGRES_USER:-research}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-research-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-research} -d ${POSTGRES_DB:-research}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build:
+      context: ../backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-research}:${POSTGRES_PASSWORD:-research-password}@postgres:5432/${POSTGRES_DB:-research}
+      REDIS_URL: redis://redis:6379/0
+      KNOWLEDGE_BASE_DIR: /knowledge_base
+    volumes:
+      - ${KNOWLEDGE_BASE_HOST_DIR:-/data/paper-agent/knowledge_base}:/knowledge_base
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    expose:
+      - "8000"
+
+  worker:
+    build:
+      context: ../backend
+    command: ["python", "-m", "app.worker"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-research}:${POSTGRES_PASSWORD:-research-password}@postgres:5432/${POSTGRES_DB:-research}
+      REDIS_URL: redis://redis:6379/0
+      KNOWLEDGE_BASE_DIR: /knowledge_base
+    volumes:
+      - ${KNOWLEDGE_BASE_HOST_DIR:-/data/paper-agent/knowledge_base}:/knowledge_base
+    depends_on:
+      - backend
+      - redis
+
+  frontend:
+    build:
+      context: ../frontend
+    depends_on:
+      - backend
+    expose:
+      - "80"
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:

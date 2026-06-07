@@ -1,0 +1,16 @@
+{
+  "lark": {
+    "identity": "user",
+    "chat_id": "",
+    "doc_token": "",
+    "create_doc": false,
+    "parent_token": "",
+    "parent_position": "my_library",
+    "listener": {
+      "identity": "bot",
+      "reply_identity": "bot",
+      "command_prefix": "/3dgs",
+      "allowed_chat_ids": []
+    }
+  }
+}
