@@ -88,6 +88,23 @@ def normalize_note_path(note_path: str, title: str = "", key: str = "") -> str:
     return raw.as_posix()
 
 
+def _resolve_markdown(root: Path, raw_note_path: str, normalized_note_path: str) -> tuple[str, str]:
+    candidates: list[tuple[str, Path]] = []
+    if normalized_note_path:
+        candidates.append((normalized_note_path, root / normalized_note_path))
+    if raw_note_path:
+        raw_path = Path(raw_note_path)
+        candidates.append((raw_note_path, root / raw_path))
+        if raw_path.parts and raw_path.parts[0].lower() == "papers":
+            legacy = Path(*raw_path.parts)
+            candidates.append((raw_note_path, root / legacy))
+
+    for resolved_note_path, path in candidates:
+        if path.exists():
+            return _read_markdown(path), resolved_note_path
+    return "", normalized_note_path or raw_note_path
+
+
 def _upsert_chunks(db: Session, paper: Paper) -> None:
     upsert_paper_chunks(db, paper)
 
@@ -103,8 +120,9 @@ def import_knowledge_base(db: Session, knowledge_base_dir: Path, workspace_id: i
     notes_found = 0
 
     for raw in (library.get("papers") or {}).values():
-        normalized_note_path = normalize_note_path(raw.get("note_path") or "", raw.get("title") or "", raw.get("key") or "")
-        markdown = _read_markdown(root / normalized_note_path) if normalized_note_path else ""
+        raw_note_path = raw.get("note_path") or ""
+        normalized_note_path = normalize_note_path(raw_note_path, raw.get("title") or "", raw.get("key") or "")
+        markdown, resolved_note_path = _resolve_markdown(root, raw_note_path, normalized_note_path)
         if markdown:
             notes_found += 1
         fm = _frontmatter(markdown)
@@ -126,14 +144,18 @@ def import_knowledge_base(db: Session, knowledge_base_dir: Path, workspace_id: i
         paper.url = raw.get("url") or fm.get("url") or ""
         paper.pdf = raw.get("pdf") or fm.get("pdf") or ""
         paper.abstract = raw.get("abstract") or ""
-        paper.abstract_zh = raw.get("abstract_zh") or fm.get("abstract_zh") or ""
+        paper.abstract_zh = raw.get("abstract_zh") or fm.get("abstract_zh") or paper.abstract_zh or ""
         paper.project_url = raw.get("project_url") or fm.get("project_url") or project_url_from_mapping(raw, markdown)
+        paper.pdf_file_path = raw.get("pdf_file_path") or fm.get("pdf_file_path") or paper.pdf_file_path or ""
+        paper.overview_figure_path = raw.get("overview_figure_path") or fm.get("overview_figure_path") or paper.overview_figure_path or ""
+        paper.overview_caption = raw.get("overview_caption") or fm.get("overview_caption") or paper.overview_caption or ""
+        paper.initial_parse_markdown = raw.get("initial_parse_markdown") or fm.get("initial_parse_markdown") or paper.initial_parse_markdown or ""
         paper.tags = raw.get("tags") or fm.get("tags") or []
         paper.status = raw.get("status") or fm.get("status") or "candidate"
         paper.reading_status = raw.get("reading_status") or fm.get("reading_status") or paper.status
         paper.priority = raw.get("priority") or fm.get("priority") or "B"
         paper.comment = raw.get("comment") or ""
-        paper.note_path = normalized_note_path
+        paper.note_path = normalize_note_path(resolved_note_path, paper.title, paper.key)
         paper.note_markdown = _strip_frontmatter(markdown)
         db.flush()
         _upsert_chunks(db, paper)

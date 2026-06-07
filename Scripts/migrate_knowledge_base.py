@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sqlite3
 import shutil
 from pathlib import Path
 from typing import Any
@@ -27,16 +28,63 @@ def load_library(source: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def db_enrichment(source: Path) -> dict[str, dict[str, Any]]:
+    db_path = source / "backend" / "research_workspace.db"
+    if not db_path.exists():
+        return {}
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            """
+            select
+                key,
+                abstract_zh,
+                pdf_file_path,
+                overview_figure_path,
+                overview_caption,
+                initial_parse_markdown
+            from papers
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    enriched: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        key = str(row["key"] or "")
+        if not key:
+            continue
+        enriched[key] = {
+            "abstract_zh": str(row["abstract_zh"] or ""),
+            "pdf_file_path": str(row["pdf_file_path"] or ""),
+            "overview_figure_path": str(row["overview_figure_path"] or ""),
+            "overview_caption": str(row["overview_caption"] or ""),
+            "initial_parse_markdown": str(row["initial_parse_markdown"] or ""),
+        }
+    return enriched
+
+
 def transformed_library(source: Path) -> tuple[dict[str, Any], dict[str, int]]:
     library = load_library(source)
     papers = library.get("papers") or {}
+    enrichments = db_enrichment(source)
     missing_notes = 0
+    enriched_fields = 0
     for paper in papers.values():
         old_note = paper.get("note_path") or ""
         if old_note and not (source / old_note).exists():
             missing_notes += 1
         paper["note_path"] = normalize_note_path(old_note, paper.get("title") or "", paper.get("key") or "")
-    return library, {"papers": len(papers), "missing_old_notes": missing_notes}
+        extra = enrichments.get(str(paper.get("key") or ""))
+        if not extra:
+            continue
+        for field, value in extra.items():
+            if value:
+                paper[field] = value
+                enriched_fields += 1
+    return library, {"papers": len(papers), "missing_old_notes": missing_notes, "enriched_fields": enriched_fields}
 
 
 def ensure_dirs(target: Path, apply: bool) -> list[Path]:
@@ -99,6 +147,7 @@ def migrate(source: Path, target: Path, apply: bool, include_notes: bool, includ
         "created_dirs": [str(path) for path in dirs],
         "papers": library_stats["papers"],
         "missing_old_notes": library_stats["missing_old_notes"],
+        "enriched_fields": library_stats["enriched_fields"],
         "metadata_files": 1,
         "notes_copied": 0,
         "indexes_copied": copy_files(source / "Indexes", target / "indexes", "*.md", apply),
