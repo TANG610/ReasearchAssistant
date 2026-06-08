@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,7 +19,10 @@ class Settings(BaseSettings):
     app_username: str = "admin"
     app_password: str = "change-me"
     knowledge_base_dir: Path = Field(default_factory=lambda: Path(__file__).resolve().parents[3] / "knowledge_base")
-    deepseek_api_key: str = ""
+    deepseek_api_key: str = Field(
+        default="",
+        validation_alias=AliasChoices("DEEPSEEK_API_KEY", "DEEPSEEK_KEY"),
+    )
     deepseek_base_url: str = "https://api.deepseek.com"
     deepseek_model: str = "deepseek-v4-pro"
     dashscope_api_key: str = ""

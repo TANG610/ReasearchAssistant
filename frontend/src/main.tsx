@@ -37,6 +37,35 @@ type CollectionOptions = {
 
 type JobResult = { status: string; result?: Record<string, unknown>; error?: string };
 type DeepReadNotice = { status: "running" | "done" | "error"; text: string } | undefined;
+type NoteSaveState = "idle" | "saving" | "saved" | "error";
+
+const NOTE_TEMPLATE_PATTERNS = [
+  /待补充/u,
+  /待精读后回答/u,
+  /输入：待补充/u,
+  /输出：待补充/u,
+  /可借鉴：待补充/u,
+  /不适合直接借鉴：待补充/u,
+  /实验设计：待补充/u,
+  /图表\/写法：待补充/u,
+];
+
+function hasMeaningfulDeepReadNote(content?: string | null): boolean {
+  if (!content?.trim()) return false;
+  const remaining = content
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !/^#{1,6}\s/.test(line))
+    .filter((line) => !NOTE_TEMPLATE_PATTERNS.some((pattern) => pattern.test(line)))
+    .join("\n")
+    .trim();
+  return remaining.length >= 60;
+}
+
+function shouldShowDeepReadPanel(paper?: Paper): boolean {
+  return paper?.reading_status === "read" && hasMeaningfulDeepReadNote(paper.note_markdown);
+}
 
 function MarkdownRenderer({
   content,
@@ -427,23 +456,54 @@ function PaperDetail({
 }) {
   const [draft, setDraft] = useState("");
   const [showMarkdown, setShowMarkdown] = useState(false);
+  const [noteSaveState, setNoteSaveState] = useState<NoteSaveState>("idle");
   const [githubHint, setGithubHint] = useState(false);
   const [deepReadNotice, setDeepReadNotice] = useState<DeepReadNotice>();
   const githubHintTimer = useRef<number | undefined>(undefined);
   const deepReadNoticeTimer = useRef<number | undefined>(undefined);
+  const noteSaveTimer = useRef<number | undefined>(undefined);
+  const lastSavedDraft = useRef("");
 
   useEffect(() => {
-    setDraft(paper?.note_markdown ?? "");
+    const nextDraft = paper?.note_markdown ?? "";
+    setDraft(nextDraft);
+    lastSavedDraft.current = nextDraft;
+    setNoteSaveState("idle");
   }, [paper?.id, paper?.note_markdown]);
 
   useEffect(() => {
-    setShowMarkdown(Boolean(paper?.note_markdown?.trim()));
-  }, [paper?.id, paper?.note_markdown]);
+    setShowMarkdown(shouldShowDeepReadPanel(paper));
+  }, [paper]);
+
+  useEffect(() => {
+    if (noteSaveTimer.current) window.clearTimeout(noteSaveTimer.current);
+    if (!paper || !showMarkdown) return;
+    if (draft === lastSavedDraft.current) return;
+
+    setNoteSaveState("saving");
+    noteSaveTimer.current = window.setTimeout(() => {
+      void (async () => {
+        try {
+          await api.updatePaper(paper.id, { note_markdown: draft });
+          lastSavedDraft.current = draft;
+          setNoteSaveState("saved");
+        } catch (error) {
+          setNoteSaveState("error");
+          onToast(error instanceof Error ? error.message : "笔记自动保存失败。");
+        }
+      })();
+    }, 700);
+
+    return () => {
+      if (noteSaveTimer.current) window.clearTimeout(noteSaveTimer.current);
+    };
+  }, [draft, onToast, paper, showMarkdown]);
 
   useEffect(() => {
     return () => {
       if (githubHintTimer.current) window.clearTimeout(githubHintTimer.current);
       if (deepReadNoticeTimer.current) window.clearTimeout(deepReadNoticeTimer.current);
+      if (noteSaveTimer.current) window.clearTimeout(noteSaveTimer.current);
     };
   }, []);
 
@@ -480,7 +540,11 @@ function PaperDetail({
       onToast("请先点击上方 AI 精读生成 Markdown。");
       return;
     }
-    await update({ note_markdown: draft });
+    if (noteSaveTimer.current) window.clearTimeout(noteSaveTimer.current);
+    setNoteSaveState("saving");
+    await api.updatePaper(current.id, { note_markdown: draft });
+    lastSavedDraft.current = draft;
+    setNoteSaveState("saved");
     onToast("笔记已保存。");
   }
 
@@ -594,11 +658,22 @@ function PaperDetail({
         )}
       </section>
       {showMarkdown && (
-        <div className="markdownPanel">
-          <textarea value={draft} onChange={(event) => setDraft(event.target.value)} />
-          <div className="notePreview">
+        <div className="noteSection">
+          <div className="noteHeader">
+            <h3>精读笔记</h3>
+            <span className={`noteSaveState ${noteSaveState}`}>
+              {noteSaveState === "saving" && "正在自动保存..."}
+              {noteSaveState === "saved" && "已自动保存"}
+              {noteSaveState === "error" && "自动保存失败"}
+              {noteSaveState === "idle" && "左侧编辑，右侧预览"}
+            </span>
+          </div>
+          <div className="markdownPanel">
+            <textarea value={draft} onChange={(event) => setDraft(event.target.value)} />
+            <div className="notePreview">
             <MarkdownRenderer content={draft} fallback="暂无笔记内容。" />
           </div>
+        </div>
         </div>
       )}
       <div className="footerActions">

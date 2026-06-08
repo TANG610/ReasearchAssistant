@@ -558,6 +558,39 @@ header {
   margin-top: 16px;
 }
 
+.noteSection {
+  margin-top: 16px;
+}
+
+.noteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.noteHeader h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.noteSaveState {
+  color: #687789;
+  font-size: 13px;
+}
+
+.noteSaveState.saving {
+  color: #14534d;
+}
+
+.noteSaveState.saved {
+  color: #166534;
+}
+
+.noteSaveState.error {
+  color: #b42318;
+}
+
 .markdownPanel textarea {
   width: 100%;
   min-height: 420px;
